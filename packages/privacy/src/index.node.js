@@ -3,7 +3,7 @@
 // Same API as the portable entry (index.js); the only difference is that the
 // bundled model is read from the file system instead of fetched, so it works
 // with no server and no network.
-export { Privacy, Secrets, readModel, modelUrl } from "./common.js";
+export { Privacy, readModel, modelUrl } from "./common.js";
 import { modelUrl, fetchBytes, loader } from "./common.js";
 
 async function readBundled() {

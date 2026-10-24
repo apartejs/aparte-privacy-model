@@ -41,7 +41,9 @@ test("mask and unmask round-trip", () => {
   const text = "Appelle Jean Dupont au 06 12 34 56 78 ou écris à jean.dupont@gmail.com";
   const masked = privacy.mask(text);
   assert.ok(!masked.text.includes("Jean Dupont") && !masked.text.includes("06 12 34 56 78"), masked.text);
-  assert.equal(privacy.unmask(masked.text, masked.secrets), text);
+  assert.ok(!("secrets" in masked));
+  assert.equal(Object.keys(masked.values).length, 3);
+  assert.equal(privacy.unmask(masked.text, masked.values), text);
 });
 
 test("the loader caches the bundled model", async () => {

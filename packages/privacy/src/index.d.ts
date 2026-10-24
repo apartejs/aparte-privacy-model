@@ -35,14 +35,11 @@ export class Privacy {
   readonly header: Record<string, unknown>;
   /** Every piece of personal data found in the text, in text order. */
   detect(text: string, options?: DetectOptions): Span[];
-  /** Replace every value with a placeholder; `secrets` maps placeholders back to values (keep it on the client). */
-  mask(text: string, options?: MaskOptions): { text: string; secrets: Record<string, string> };
+  /** Replace every value with a placeholder; `values` maps placeholders back to the original values (keep it on the client). */
+  mask(text: string, options?: MaskOptions): { text: string; values: Record<string, string> };
   /** Put the values back: the inverse of `mask`. */
-  unmask(text: string, secrets: Record<string, string>): string;
+  unmask(text: string, values: Record<string, string>): string;
 }
-
-/** The same class under the name of the shared runtime. */
-export { Privacy as Secrets };
 
 /** Parse a `.bin` model file. */
 export function readModel(buffer: ArrayBuffer): { header: Record<string, unknown>; merges: Uint16Array; weights: Record<string, { data: Float32Array; shape: number[] }> };

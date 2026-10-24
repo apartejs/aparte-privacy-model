@@ -5,8 +5,8 @@
 // the "node" condition of package.json. The portable entry (index.js) is the
 // default on purpose: a tool that knows nothing about export conditions gets
 // the one that builds everywhere, instead of failing on a Node built-in.
-export { Secrets, Secrets as Privacy, readModel } from "./runtime.js";
-import { Secrets } from "./runtime.js";
+export { Privacy, readModel } from "./runtime.js";
+import { Privacy } from "./runtime.js";
 
 /** URL of the bundled model file (int8), as resolved from this module. */
 export const modelUrl = new URL("../model/privacy-v1-int8.bin", import.meta.url);
@@ -32,7 +32,7 @@ export async function toBytes(source) {
 export function loader(readBundled) {
   let cached;
   return async function loadPrivacy(source) {
-    if (source === undefined) return (cached ??= readBundled().then((bytes) => new Secrets(bytes)));
-    return new Secrets(await toBytes(source));
+    if (source === undefined) return (cached ??= readBundled().then((bytes) => new Privacy(bytes)));
+    return new Privacy(await toBytes(source));
   };
 }

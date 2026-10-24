@@ -12,7 +12,7 @@
 // your app is bundled the default URL no longer points at the package: serve
 // the `.bin` yourself and pass it in — `loadPrivacy(url)`, or with Vite
 // `import modelUrl from "@aparte/privacy/model?url"`. See the README.
-export { Privacy, Secrets, readModel, modelUrl } from "./common.js";
+export { Privacy, readModel, modelUrl } from "./common.js";
 import { modelUrl, fetchBytes, loader } from "./common.js";
 
 /** Load the model once and return a ready detector. No argument = the bundled model. */

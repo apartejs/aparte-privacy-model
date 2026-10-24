@@ -16,7 +16,7 @@ Each span has `start` and `end` (UTF-16 offsets: `text.slice(start, end)`), its 
 
 ## Options
 
-`detect(text, { minScore, ignore })` and `mask(text, { minScore, ignore, placeholder })`. The model reports raw spans; `ignore` (exact strings or RegExps) and `minScore` are your policy, applied after it. `mask` replaces every value with a placeholder (`[PRIVATE_PERSON_1]`…) and returns the map to put them back with `unmask`, on the client.
+`detect(text, { minScore, ignore })` and `mask(text, { minScore, ignore, placeholder })`. The model reports raw spans; `ignore` (exact strings or RegExps) and `minScore` are your policy, applied after it. `mask(text)` replaces every value with a placeholder (`[PRIVATE_PERSON_1]`…) and returns `{ text, values }`; `unmask(answer, values)` puts them back, on the client.
 
 For secrets (passwords, API keys, tokens), use [`@aparte/secrets`](https://www.npmjs.com/package/@aparte/secrets): the two models run side by side on the same text.
 

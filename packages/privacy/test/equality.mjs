@@ -3,11 +3,11 @@
 //
 //   node packages/privacy/test/equality.mjs privacy-v1-int8.bin references_int8.jsonl
 import { readFileSync } from "node:fs";
-import { Secrets } from "../src/runtime.js";
+import { Privacy } from "../src/runtime.js";
 
 const [, , modelPath, refsPath] = process.argv;
 const buf = readFileSync(modelPath);
-const model = new Secrets(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+const model = new Privacy(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
 const lines = readFileSync(refsPath, "utf-8").split("\n").filter(Boolean).map((l) => JSON.parse(l));
 
 // Python offsets count code points; the runtime returns UTF-16 offsets: compare the spans' text

@@ -1,9 +1,9 @@
 // The aparte runtime: reads an aparte `.bin` model file (format 1: a JSON header, the BPE merges and the
 // quantized weights) and finds spans in text, anywhere JavaScript runs. No dependency, no network.
 //
-// It is the runtime of @aparte/secrets, unchanged except that it accepts the `privacy` task: the
-// labels come from the file's header (here the seven personal-data categories), so the same code
-// serves both models and gives the same spans as the Python reader.
+// It is the runtime of @aparte/secrets with two changes: it accepts the `privacy` task (the labels
+// come from the file's header, here the seven personal-data categories), and `mask` returns its map
+// of placeholders as `values` instead of `secrets`. Same spans as the Python reader.
 
 // Python's str.isspace(): JS's \s adds U+FEFF and lacks \x1c-\x1f and \x85
 const SPACE = "\\t\\n\\v\\f\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000";
@@ -251,7 +251,7 @@ function viterbi(logp, L, C, { M, start, end }) {
   return path;
 }
 
-export class Secrets {
+export class Privacy {
   /** @param {ArrayBuffer} buffer the contents of a `.bin` model file */
   constructor(buffer) {
     const { header, merges, weights } = readModel(buffer);
@@ -325,15 +325,15 @@ export class Secrets {
   }
 
   /**
-   * Replace every secret with a placeholder, reversibly: `{ text, secrets }`, where
-   * `secrets` maps each placeholder back to its value (keep it on the client).
+   * Replace every value with a placeholder, reversibly: `{ text, values }`, where
+   * `values` maps each placeholder back to its value (keep it on the client).
    *
    * @param {string} text
    * @param {{ minScore?: number, ignore?: Iterable<string | RegExp>, placeholder?: (subtype: string, n: number) => string }} [options]
    */
   mask(text, options) {
     const make = options?.placeholder ?? ((subtype, n) => `[${subtype.toUpperCase()}_${n}]`);
-    const found = this.detect(text, options), secrets = {}, seen = new Map();
+    const found = this.detect(text, options), values = {}, seen = new Map();
     // a value found once is masked everywhere it appears: leaving a second copy in clear would defeat the
     // purpose (the model may only flag the occurrence whose context gives it away)
     const spans = [...found];
@@ -348,16 +348,16 @@ export class Secrets {
     for (const s of spans) {
       if (s.start < pos) continue;
       let ph = seen.get(s.text);
-      if (!ph) { ph = make(s.subtype, ++n); seen.set(s.text, ph); secrets[ph] = s.text; }
+      if (!ph) { ph = make(s.subtype, ++n); seen.set(s.text, ph); values[ph] = s.text; }
       out += text.slice(pos, s.start) + ph; pos = s.end;
     }
-    return { text: out + text.slice(pos), secrets };
+    return { text: out + text.slice(pos), values };
   }
 
   /** Put the values back: the inverse of `mask` (e.g. on an AI's answer). */
-  unmask(text, secrets) {
+  unmask(text, values) {
     let out = text;
-    for (const [ph, value] of Object.entries(secrets)) out = out.split(ph).join(value);
+    for (const [ph, value] of Object.entries(values)) out = out.split(ph).join(value);
     return out;
   }
 }
@@ -369,6 +369,3 @@ function filter(spans, options) {
   const ignore = [...(options.ignore ?? [])];
   return spans.filter((s) => s.score >= min && !ignore.some((r) => (typeof r === "string" ? s.text === r : r.test(s.text))));
 }
-
-/** Convenience: build a Secrets detector from an ArrayBuffer (or a Promise of one). */
-export async function loadSecrets(buffer) { return new Secrets(await buffer); }
