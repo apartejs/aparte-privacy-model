@@ -9,6 +9,7 @@ This repository holds the code (npm package, tests). The model files are on [Hug
 | path | package |
 |---|---|
 | `packages/privacy/` | `@aparte/privacy` (npm): runtime and the int8 model |
+| `python/aparte_privacy/reader.py` | the reference implementation, numpy only |
 
 Kotlin: [aparte-privacy-kotlin](https://github.com/apartejs/aparte-privacy-kotlin). Swift: [aparte-privacy-swift](https://github.com/apartejs/aparte-privacy-swift).
 
@@ -20,7 +21,7 @@ const privacy = await loadPrivacy();
 privacy.detect("Appelle Jean Dupont au 06 12 34 56 78");
 ```
 
-See the package README for the options and the limits (names are the weakest category).
+See the package README for the options and the limits: names are the weakest category, and short messages are its weak spot.
 
 ## License
 

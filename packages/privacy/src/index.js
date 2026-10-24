@@ -1,24 +1,19 @@
-// @aparte/privacy — personal data in text, on the device.
+// @aparte/privacy — the runtime plus the model (int8, ~196 KB), ready to use with no configuration.
 //
 //   import { loadPrivacy } from "@aparte/privacy";
 //   const privacy = await loadPrivacy();
 //   privacy.detect("Appelle Jean Dupont au 06 12 34 56 78");
-//   // [{ start, end, text, subtype: "private_person", score }]
 //
-// The runtime is the one of @aparte/secrets (same file format, same spans); the bundled model is the
-// privacy model (7 categories), not the secrets one. The model reports raw spans: what to keep is your
-// policy, applied after it (minScore, ignore).
-import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-import { Secrets } from "./runtime.js";
+// This is the portable entry: it fetches the model, and imports nothing that a
+// browser bundler cannot resolve. Node picks index.node.js instead (the "node"
+// condition), which reads the bundled file straight from disk.
+//
+// A bundler rewrites neither `import.meta.url` nor the model's path, so once
+// your app is bundled the default URL no longer points at the package: serve
+// the `.bin` yourself and pass it in — `loadPrivacy(url)`, or with Vite
+// `import modelUrl from "@aparte/privacy/model?url"`. See the README.
+export { Privacy, Secrets, readModel, modelUrl } from "./common.js";
+import { modelUrl, fetchBytes, loader } from "./common.js";
 
-export { Secrets };
-
-/** Load the bundled privacy model (int8). Load it once and keep the result. */
-export async function loadPrivacy(source) {
-  const buf = source
-    ? new Uint8Array(await (await fetch(source)).arrayBuffer())
-    : await readFile(fileURLToPath(new URL("../model/privacy-v1-int8.bin", import.meta.url)));
-  const bytes = buf.buffer ? buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) : buf;
-  return new Secrets(bytes);
-}
+/** Load the model once and return a ready detector. No argument = the bundled model. */
+export const loadPrivacy = loader(() => fetchBytes(modelUrl));

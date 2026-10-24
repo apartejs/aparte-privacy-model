@@ -1,0 +1,22 @@
+{
+  "name": "aparte-privacy-model",
+  "private": true,
+  "description": "aparte-privacy: a 196 KB model that finds personal data in text, in the browser or Node, with no API call",
+  "license": "MIT",
+  "homepage": "https://huggingface.co/apartejs/aparte-privacy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apartejs/aparte-privacy-model.git"
+  },
+  "bugs": "https://github.com/apartejs/aparte-privacy-model/issues",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test packages/*/test/*.test.mjs"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

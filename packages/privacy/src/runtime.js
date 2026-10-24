@@ -1,17 +1,9 @@
-// @aparte/secrets — finds passwords, API keys, tokens and private keys in text,
-// anywhere JavaScript runs (browser, Node, workers). No dependency, no network.
+// The aparte runtime: reads an aparte `.bin` model file (format 1: a JSON header, the BPE merges and the
+// quantized weights) and finds spans in text, anywhere JavaScript runs. No dependency, no network.
 //
-// Reads the `.bin` files published at https://huggingface.co/apartejs/aparte-secrets
-// (format 1, the same container as aparte-titler): a JSON header, the BPE merges
-// and the quantized weights.
-//
-//   import { Secrets } from "@aparte/secrets";
-//   const secrets = new Secrets(await fetch(modelUrl).then((r) => r.arrayBuffer()));
-//   secrets.detect("my db password is Hunter2024!");
-//   // -> [{ start: 18, end: 29, text: "Hunter2024!", subtype: "password", score: 0.69 }]
-//
-// The Python reference implementation (python/aparte_secrets/reader.py) gives the
-// same spans; the test in test/ checks it text by text.
+// It is the runtime of @aparte/secrets, unchanged except that it accepts the `privacy` task: the
+// labels come from the file's header (here the seven personal-data categories), so the same code
+// serves both models and gives the same spans as the Python reader.
 
 // Python's str.isspace(): JS's \s adds U+FEFF and lacks \x1c-\x1f and \x85
 const SPACE = "\\t\\n\\v\\f\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000";

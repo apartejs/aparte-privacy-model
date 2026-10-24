@@ -10,14 +10,38 @@
     "directory": "packages/privacy"
   },
   "bugs": "https://github.com/apartejs/aparte-privacy-model/issues",
-  "keywords": ["pii", "personal-data", "anonymization", "redaction", "privacy", "names", "gdpr", "on-device", "aparte"],
+  "keywords": [
+    "pii",
+    "personal-data",
+    "anonymization",
+    "redaction",
+    "privacy",
+    "names",
+    "gdpr",
+    "on-device",
+    "aparte"
+  ],
   "type": "module",
   "main": "./src/index.js",
   "exports": {
-    ".": "./src/index.js",
+    ".": {
+      "types": "./src/index.d.ts",
+      "node": "./src/index.node.js",
+      "default": "./src/index.js"
+    },
     "./model": "./model/privacy-v1-int8.bin"
   },
-  "files": ["src", "model", "README.md", "CHANGELOG.md", "LICENSE"],
+  "files": [
+    "src",
+    "model",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "module": "./src/index.js",
+  "types": "./src/index.d.ts"
 }
