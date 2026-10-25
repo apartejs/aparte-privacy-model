@@ -9,7 +9,7 @@ export { Privacy, readModel } from "./runtime.js";
 import { Privacy } from "./runtime.js";
 
 /** URL of the bundled model file (int8), as resolved from this module. */
-export const modelUrl = new URL("../model/privacy-v1-int8.bin", import.meta.url);
+export const modelUrl = new URL("../model/privacy-v1.1-int8.bin", import.meta.url);
 
 /** Fetch a model file over the network. */
 export async function fetchBytes(url) {

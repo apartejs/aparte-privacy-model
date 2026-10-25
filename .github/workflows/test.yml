@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 22
       - run: curl -fsSL -o references_int8.jsonl https://huggingface.co/apartejs/aparte-privacy/resolve/main/references_int8.jsonl
-      - run: node packages/privacy/test/equality.mjs packages/privacy/model/privacy-v1-int8.bin references_int8.jsonl
+      - run: node packages/privacy/test/equality.mjs packages/privacy/model/privacy-v1.1-int8.bin references_int8.jsonl
   reader:
     runs-on: ubuntu-latest
     steps:
@@ -33,4 +33,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r python/requirements.txt
-      - run: python python/aparte_privacy/reader.py packages/privacy/model/privacy-v1-int8.bin "Appelle Jean Dupont au 06 12 34 56 78"
+      - run: python python/aparte_privacy/reader.py packages/privacy/model/privacy-v1.1-int8.bin "Appelle Jean Dupont au 06 12 34 56 78"

@@ -1,7 +1,7 @@
 // Equality test of the JS runtime against the reference reader (python/aparte_privacy/reader.py),
 // at the same precision: same spans (same text, same subtype), score within 2e-4, text by text.
 //
-//   node packages/privacy/test/equality.mjs privacy-v1-int8.bin references_int8.jsonl
+//   node packages/privacy/test/equality.mjs privacy-v1.1-int8.bin references_int8.jsonl
 import { readFileSync } from "node:fs";
 import { Privacy } from "../src/runtime.js";
 

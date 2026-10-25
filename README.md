@@ -21,7 +21,7 @@ const privacy = await loadPrivacy();
 privacy.detect("Appelle Jean Dupont au 06 12 34 56 78");
 ```
 
-See the package README for the options and the limits: names are the weakest category, and short messages are its weak spot.
+See the package README for the options and the limits: names are the weakest category. Since 1.1, short messages are handled as well as long ones.
 
 ## License
 
